@@ -30,7 +30,8 @@ const QuizDivision = ({ division }) => {
 
   useEffect(() => {
     setLoading(true);
-    axios.get('http://localhost:5000/quiz')
+    //axios.get('http://localhost:5000/quiz')
+    axios.get('https://quiz-mernstack.onrender.com/quiz')
       .then((response) => {
         const allQuizzes = response.data.allQuiz;
         const divisionQuizzes = allQuizzes.filter(quiz => quiz.division.toLowerCase() === division.toLowerCase());
