@@ -7,7 +7,8 @@ export default function DeleteQuiz() {
     const {id} = useParams();
     const navigate = useNavigate();
     const handleNextClick = () => {
-        axios.delete(`http://localhost:5000/quiz/delete/${id}`)
+      //  axios.delete(`http://localhost:5000/quiz/delete/${id}`)
+         axios.delete(`https://quiz-mernstack.onrender.com/quiz/delete/${id}`)
         .then(()=>{
             enqueueSnackbar("Quiz deleted Successfully",{variant:"success"});
             navigate("/quizes")
