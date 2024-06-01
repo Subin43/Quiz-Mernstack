@@ -1,0 +1,7 @@
+ services:
+  - type: web
+    name: Backend
+    env: node
+    plan: free
+    buildCommand: 'cd src && npm install'
+    startCommand: 'cd src && npm start'
