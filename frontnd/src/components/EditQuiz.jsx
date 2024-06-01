@@ -20,7 +20,7 @@ export default function EditQuiz() {
     const fetchQuiz = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`http://localhost:5000/quiz/${id}`);
+        const response = await axios.get(`https://quiz-mernstack.onrender.com/quiz/${id}`);
         const { sNo, question, answer, option } = response.data;
         setSNo(sNo);
         setQuestion(question);
@@ -45,7 +45,7 @@ export default function EditQuiz() {
     try {
       setLoading(true);
       const updatedOption = option.split(',').map(opt => opt.trim());
-      await axios.put(`http://localhost:5000/quiz/edit/${id}`, { sNo, question, answer, option: updatedOption });
+      await axios.put(`https://quiz-mernstack.onrender.com/quiz/edit/${id}`, { sNo, question, answer, option: updatedOption });
       setLoading(false);
       setQuizEdited(true);
       enqueueSnackbar("Quiz edited successfully", { variant: 'success' });
