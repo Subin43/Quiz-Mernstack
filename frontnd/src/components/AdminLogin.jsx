@@ -1,22 +1,28 @@
 // AdminLogin.jsx
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useSnackbar } from "notistack";
 import { useNavigate } from "react-router-dom";
 import Header from "./Header";
+import { AdminContext } from "./pages/AdminContext";
 
 const AdminLogin = () => {
   const [userId, setUserId] = useState(0);
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
+  const {isAdmin,setIsAdmin} = useContext(AdminContext);
 
   const handleVerify = () => {
+    const empId = process.env.REACT_APP_ADMIN_ID;
+    console.log(empId);
     const adminId = [503, 506, 513];
     if (!adminId.includes(parseInt(userId))) {
       enqueueSnackbar("Invalid admin user_Id", { variant: "error" });
       return;
     }
     enqueueSnackbar("Admin id detected", { variant: "success" });
-    localStorage.setItem("isAdmin",true); // store admin status in the local storage
+    setIsAdmin(true);
+    console.log(isAdmin)
+    //localStorage.setItem("isAdmin",true); // store admin status in the local storage
     navigate("/login");
   };
 

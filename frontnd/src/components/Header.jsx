@@ -9,7 +9,7 @@ export default function Header() {
       <div className="flex items-center">
         <FaHome className="text-white text-3xl ml-4" />
       </div>
-      <h2 className="absolute left-1/2 transform -translate-x-1/2 text-white text-xl">QUIZ APP</h2>
+      <h2 className="absolute left-1/2 transform -translate-x-1/2 text-white text-xl font-bold">QUIZ APP</h2>
       <Link to="/">
         <MdLogin className="text-white text-3xl mr-4" />
       </Link>

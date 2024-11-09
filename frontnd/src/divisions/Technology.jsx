@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useSnackbar } from 'notistack';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
-import Header from '../components/Header';
-import QuizFooter from '../components/QuizFooter';
-import Footer from '../components/Footer';
-
+import React, { useState, useEffect, useContext } from "react";
+import axios from "axios";
+import { useSnackbar } from "notistack";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
+import Header from "../components/Header";
+import QuizFooter from "../components/QuizFooter";
+import Footer from "../components/Footer";
+import { AdminContext } from "../components/pages/AdminContext";
 
 const QuizProgress = ({ totalQuizzes, completedQuizzes, score }) => {
   return (
@@ -27,37 +27,40 @@ const QuizDivision = ({ division }) => {
   const [score, setScore] = useState(0);
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate(); // Initialize useNavigate
-
+  const { isAdmin } = useContext(AdminContext);
+  console.log(isAdmin);
   useEffect(() => {
     setLoading(true);
     //axios.get('http://localhost:5000/quiz')
-    axios.get('https://quiz-mernstack.onrender.com/quiz')
+    axios
+      .get("https://quiz-mernstack.onrender.com/quiz")
       .then((response) => {
         const allQuizzes = response.data.allQuiz;
-        const divisionQuizzes = allQuizzes.filter(quiz => quiz.division.toLowerCase() === division.toLowerCase());
+        const divisionQuizzes = allQuizzes.filter(
+          (quiz) => quiz.division.toLowerCase() === division.toLowerCase()
+        );
         setFilteredQuizzes(divisionQuizzes);
         setLoading(false);
       })
       .catch((error) => {
         setLoading(false);
-        enqueueSnackbar("Error fetching quizzes", { variant: 'error' });
+        enqueueSnackbar("Error fetching quizzes", { variant: "error" });
         console.log("error:", error.message);
       });
   }, [enqueueSnackbar, division]);
 
   // get the user is admin or not
-  const isAdmin = localStorage.getItem("isAdmin") === "true";
-  console.log(isAdmin);
+  //const isAdmin = localStorage.getItem("isAdmin") === "true";
 
   const handleOptionChange = (quizId, option) => {
     if (!disabledOptions[quizId]) {
-      setSelectedOptions(prevState => ({
+      setSelectedOptions((prevState) => ({
         ...prevState,
-        [quizId]: option
+        [quizId]: option,
       }));
-      setDisabledOptions(prevState => ({
+      setDisabledOptions((prevState) => ({
         ...prevState,
-        [quizId]: true
+        [quizId]: true,
       }));
     }
   };
@@ -69,20 +72,26 @@ const QuizDivision = ({ division }) => {
   const handleNextClick = () => {
     handleQuizCompletion();
     if (currentQuizIndex < filteredQuizzes.length - 1) {
-      setCurrentQuizIndex(prevIndex => prevIndex + 1);
+      setCurrentQuizIndex((prevIndex) => prevIndex + 1);
     }
   };
 
   const handleQuizCompletion = () => {
     const currentQuiz = filteredQuizzes[currentQuizIndex];
     if (selectedOptions[currentQuiz._id] === currentQuiz.answer) {
-      setScore(prevScore => prevScore + 1);
+      setScore((prevScore) => prevScore + 1);
     }
-    setCompletedQuizzes(prevCount => prevCount + 1);
+    setCompletedQuizzes((prevCount) => prevCount + 1);
 
     // Check if all quizzes are completed
     if (completedQuizzes + 1 === filteredQuizzes.length) {
-      navigate('/finish', { state: { score: score + (selectedOptions[currentQuiz._id] === currentQuiz.answer ? 1 : 0) } });
+      navigate("/finish", {
+        state: {
+          score:
+            score +
+            (selectedOptions[currentQuiz._id] === currentQuiz.answer ? 1 : 0),
+        },
+      });
     }
   };
 
@@ -97,13 +106,13 @@ const QuizDivision = ({ division }) => {
             <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
           </div>
         ) : (
-          <div className='flex flex-col items-start p-6 m-10'>
-            <h3 className='text-2xl mb-6 font-bold'>{`${division} Quizzes`}</h3>
+          <div className="flex flex-col items-start p-6 m-10">
+            <h3 className="text-2xl mb-6 font-bold">{`${division} Quizzes`}</h3>
             {currentQuiz && (
               <div>
                 <div className="flex items-center mb-2">
                   <span className="font-bold mr-2">{currentQuiz.s_No}.</span>
-                  <span className='font-bold mr-2'>{currentQuiz.question}</span>
+                  <span className="font-bold mr-2">{currentQuiz.question}</span>
                 </div>
                 <ul>
                   {currentQuiz.option.map((option, index) => (
@@ -112,16 +121,22 @@ const QuizDivision = ({ division }) => {
                         <input
                           type="checkbox"
                           checked={selectedOptions[currentQuiz._id] === option}
-                          onChange={() => handleOptionChange(currentQuiz._id, option)}
+                          onChange={() =>
+                            handleOptionChange(currentQuiz._id, option)
+                          }
                           disabled={disabledOptions[currentQuiz._id]}
                         />
-                        <span className={`${
-                          selectedOptions[currentQuiz._id] === option
-                            ? isCorrectOption(currentQuiz, option)
-                              ? 'text-green-500'
-                              : 'text-red-500'
-                            : ''
-                        }`}>{option}</span>
+                        <span
+                          className={`${
+                            selectedOptions[currentQuiz._id] === option
+                              ? isCorrectOption(currentQuiz, option)
+                                ? "text-green-500"
+                                : "text-red-500"
+                              : ""
+                          }`}
+                        >
+                          {option}
+                        </span>
                       </label>
                     </li>
                   ))}
@@ -143,14 +158,14 @@ const QuizDivision = ({ division }) => {
                 Submit
               </button>
             )}
-            <QuizProgress totalQuizzes={filteredQuizzes.length} completedQuizzes={completedQuizzes} score={score} />
+            <QuizProgress
+              totalQuizzes={filteredQuizzes.length}
+              completedQuizzes={completedQuizzes}
+              score={score}
+            />
           </div>
         )}
-        <div>
-          {
-            isAdmin ? <QuizFooter /> : <Footer />
-          }
-        </div>
+        <div>{isAdmin ? <QuizFooter /> : <Footer />}</div>
       </div>
     </div>
   );
