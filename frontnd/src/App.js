@@ -8,12 +8,14 @@ import FinalPage from './divisions/FinalPage';
 import EditQuiz from './components/EditQuiz';
 import AdminLogin from './components/AdminLogin';
 import DeleteQuiz from './components/DeleteQuiz';
+import Signup from './components/pages/Signup';
 
 function App() {
   return (
     <Routes>
       <Route path='/admin' element={<AdminLogin />} />
       <Route path='/login' element={<Login />} />
+      <Route path='/signup' element={<Signup/>} />
       <Route path="/" element={<Home />} />
       <Route path="/quizes" element={<Quizes />} />
       <Route path="/technology" element={<QuizDivision division="Technology" />} />

@@ -2,7 +2,8 @@ const express = require("express");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const routes = require('./routes/quizRoutes')
+const quizRoutes = require('./routes/quizRoutes');
+const loginRoutes = require('./routes/loginRoutes.js')
 
 dotenv.config();
 const app = express();
@@ -26,7 +27,8 @@ const corsOptions = {
 // Enable preflight requests for CORS
 app.options('*', cors(corsOptions));
 app.use(express.json()); // accept the json message
-app.use('/quiz',routes)
+app.use('/quiz',quizRoutes);
+app.use('/login',loginRoutes)
 
 
 mongoose
